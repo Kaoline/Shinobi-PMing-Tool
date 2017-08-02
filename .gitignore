@@ -1,0 +1,6 @@
+/ShinobiPMingTool/nbproject/private/
+build/
+dist/
+.idea/
+__pycache__/
+ShinobiTool.spec
