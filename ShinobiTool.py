@@ -2,9 +2,12 @@ import sys
 import os
 import requests
 from multiprocessing import Queue # Resolves Import errors
+from multiprocessing.dummy import Pool as ThreadPool
+from functools import partial
 from tkinter import *
 from tkinter import messagebox
 from bs4 import BeautifulSoup
+import time
 
 # -----------------------------------------
 # GUI
@@ -127,20 +130,6 @@ class LoginFrame(Frame):
         else:
             self.errorLabel.configure(text="Problème d'identifiants, veuillez réessayer.")
 
-class UpdateProgressBox(Frame):
-    def __init__(self, master):
-        self.root = master
-        self.root.title("Envoi en cours...")
-
-        self.build_frame()
-
-    def build_frame(self):
-        self.label = Label(self.root, text="Test")
-        self.label.grid(padx=20, pady=20)
-        
-    def updateText(self, text):
-        self.label.configure(text=text)
-
 # -----------------------------------------
 # Model
 # -----------------------------------------
@@ -172,22 +161,39 @@ class ShinobiAccess:
         payload = {'destinataire': receiver.encode(self.encoding), 'sujet': title.encode(self.encoding), 'message': messageContent.encode(self.encoding), 'envoi': 1}
         r = self.session.post('http://www.shinobi.fr/index.php?page=menu-messagerie', payload)
 
-    def get_shinobis(self, minPage = 1, maxPage = 500, minLvl = 1, maxLvl = 100, village = "Chikara", minScore = 1, maxScore = 99999):
+    def get_shinobis(self, minPage, maxPage, minLvl, maxLvl, village, minScore, maxScore):
+        link="http://www.shinobi.fr/index.php?page=classement&type=classement_joueurs"
+        if not village is None:
+            link += '&village='+village.lower()
+        link += "&p="
+
+        time1 = time.time()
+        partial_search = partial(self.search_classment_page, classmentLink=link, minLvl=minLvl, maxLvl=maxLvl, village=village, minScore=minScore, maxScore=maxScore)
+        pool = ThreadPool()
+        shinoobs = pool.map(partial_search, range(minPage, maxPage+1))
+        pool.close()
+        pool.join()
+        shinoobs = [item for sublist in shinoobs for item in sublist]
+        time2 = time.time()
+        print("Temps de recherche (secondes) : " + str(time2 - time1))
+
+        return shinoobs
+
+    def search_classment_page(self, pageNumber, classmentLink, minLvl, maxLvl, village, minScore, maxScore):
         shinoobs = []
-        for i in range(minPage,maxPage+1):
-            page = self.session.get('http://www.shinobi.fr/index.php?page=classement&type=classement_joueurs&p='+str(i))
-            soup = BeautifulSoup(page.text, "html.parser")
-            table = soup.find(id="classement_general")
-            for tr in table.find_all("tr")[1:]:
-                name = tr.find(class_="nom").a.text
-                # team = tr.find(class_="equipe").a.text
-                lvl = int(tr.find(class_="equipe").next_sibling.text)
-                # clazz = tr.find(class_="village").previous_sibling.img["alt"]
-                sVillage = tr.find(class_="village").a.span.text
-                evo = int(tr.find(class_="evolution").text[1:])
-                if lvl >= minLvl and lvl <= maxLvl and sVillage == village.lower() and evo >= minScore and evo <= maxScore:
-                    shinoobs.append(name)
-            print("Page " + str(i) + " ok")
+        page = self.session.get(classmentLink + str(pageNumber))
+        soup = BeautifulSoup(page.text, "html.parser")
+        table = soup.find(id="classement_general")
+        for tr in table.find_all("tr")[1:]:
+            name = tr.find(class_="nom").a.text
+            # team = tr.find(class_="equipe").a.text
+            lvl = int(tr.find(class_="equipe").next_sibling.text)
+            # clazz = tr.find(class_="village").previous_sibling.img["alt"]
+            sVillage = tr.find(class_="village").a.span.text
+            evo = int(tr.find(class_="evolution").text[1:])
+            if lvl >= minLvl and lvl <= maxLvl and (village is None or sVillage == village.lower()) and evo >= minScore and evo <= maxScore:
+                shinoobs.append(name)
+        # print("Page " + str(pageNumber) + " ok")
         return shinoobs
 
 # -----------------------------------------
@@ -207,12 +213,17 @@ class Controller:
             LoginFrame(Toplevel(), self)
         confirm = messagebox.askyesno("Vraiment ?", message="Envoyer le message avec le compte " + self.shinobiAccess.login + " ?")
         if confirm:
-            updateBox = UpdateProgressBox(Toplevel())
             receivers = namesList.split("\n")
-            for i in range(0, len(receivers)):
-                self.shinobiAccess.send_message(receivers[i], title, message)
-                updateBox.updateText("Envoi du message " + str(i+1) + "/" + str(len(receivers)))
-            updateBox.updateText("Messages envoyés")
+            print("Envoi du message. Temps prévu : " + str(len(receivers) * 0.075) + " secondes.")
+
+            time1 = time.time()
+            pool = ThreadPool()
+            pool.map(partial(self.shinobiAccess.send_message, title=title, messageContent=message), receivers)
+            pool.close()
+            time2 = time.time()
+            print("Temps d'envoi : " + str(time2 - time1))
+
+            messagebox.showinfo("Fini !", "Message envoyé aux " + str(len(receivers)) + " shinobis.")
 
     def connect(self, login, password):
         return self.shinobiAccess.connect(login, password)
@@ -240,9 +251,9 @@ class Controller:
     def save_message(self, title, message):
         open("Message.txt", "w", encoding="utf-8").write("[Sujet]\n" + title + "\n[Message]\n" + message.replace("\r", ""))
 
-    def search_classment(self):
-        shinobis = self.shinobiAccess.get_shinobis(maxPage=100)
-        open("Shinobis.txt", "w", encoding = "utf-8").write("\n".join(shinobis))
+    def search_classment(self, minPage=1, maxPage=600, minLvl=100, maxLvl=100, village="Chikara", minScore=0, maxScore=99999):
+        shinobis = self.shinobiAccess.get_shinobis(minPage, maxPage, minLvl, maxLvl, village, minScore, maxScore)
+        open("Shinobis.txt", "w", encoding="utf-8").write("\n".join(shinobis))
 
 # -----------------------------------------
 # Main
