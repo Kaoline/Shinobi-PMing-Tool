@@ -217,7 +217,7 @@ class Controller:
         confirm = messagebox.askyesno("Vraiment ?", message="Envoyer le message avec le compte " + self.shinobiAccess.login + " ?")
         if confirm:
             receivers = namesList.split("\n")
-            print("Envoi du message. Temps prévu : " + str(len(receivers) * 0.075) + " secondes.")
+            print("Envoi du message. Estimation : " + str(len(receivers) * 0.075) + " secondes.")
 
             time1 = time.time()
             pool = ThreadPool()
