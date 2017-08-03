@@ -155,11 +155,14 @@ class ShinobiAccess:
 
     def send_message(self, receiver, title, messageContent):
         """Needs connection"""
-        if self.encoding == None:
-            self.get_encoding()
-        r = self.session.get('http://www.shinobi.fr/index.php?page=menu-messagerie-nouveau')
-        payload = {'destinataire': receiver.encode(self.encoding), 'sujet': title.encode(self.encoding), 'message': messageContent.encode(self.encoding), 'envoi': 1}
-        r = self.session.post('http://www.shinobi.fr/index.php?page=menu-messagerie', payload)
+        try:
+            if self.encoding == None:
+                self.get_encoding()
+            r = self.session.get('http://www.shinobi.fr/index.php?page=menu-messagerie-nouveau')
+            payload = {'destinataire': receiver.encode(self.encoding, "xmlcharrefreplace"), 'sujet': title.encode(self.encoding, "xmlcharrefreplace"), 'message': messageContent.encode(self.encoding, "xmlcharrefreplace"), 'envoi': 1}
+            self.session.post('http://www.shinobi.fr/index.php?page=menu-messagerie', payload)
+        except Exception as error:
+            print("Problème à l'envoi au destinataire " + receiver + ".\nErreur : " + str(error))
 
     def get_shinobis(self, minPage, maxPage, minLvl, maxLvl, village, minScore, maxScore):
         link="http://www.shinobi.fr/index.php?page=classement&type=classement_joueurs"
