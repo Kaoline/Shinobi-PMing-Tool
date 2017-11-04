@@ -277,11 +277,13 @@ class Controller:
 # -----------------------------------------
 # Main
 # -----------------------------------------
+print("Starting at " + time.strftime("%H:%M:%S"))
 controller = Controller()
 controller.show_pmer()
 
 # shinobis = controller.search_ranking()
-# print(shinobis)
+print(len(shinobis))
+print("Finished at " + time.strftime("%H:%M:%S"))
 
 # Run this in cmd to obtain executable
 # pyinstaller --clean --onefile ShinobiTool.py
