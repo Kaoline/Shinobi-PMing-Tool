@@ -193,16 +193,21 @@ class ShinobiAccess:
         page = self.session.get(ranking_link + str(page_number))
         soup = BeautifulSoup(page.text, "html.parser")
         table = soup.find(id="classement_general")
-        for tr in table.find_all("tr")[1:]:
-            name = tr.find(class_="nom").a.text
-            # team = tr.find(class_="equipe").a.text
-            lvl = int(tr.find(class_="equipe").next_sibling.text)
-            # clazz = tr.find(class_="village").previous_sibling.img["alt"]
-            sVillage = tr.find(class_="village").a.span.text
-            evo = int(tr.find(class_="evolution").text[1:])
-            if min_lvl <= lvl <= max_lvl and (village is None or sVillage == village.lower()) and min_score <= evo <= max_score:
-                shinoobs.append(name)
-        # print("Page " + str(page_number) + " ok")
+        try:
+            for tr in table.find_all("tr")[1:]:
+                name = tr.find(class_="nom").a.text
+                # team = tr.find(class_="equipe").a.text
+                lvl = int(tr.find(class_="equipe").next_sibling.text)
+                # clazz = tr.find(class_="village").previous_sibling.img["alt"]
+                sVillage = tr.find(class_="village").a.span.text
+                evo = int(tr.find(class_="evolution").text[1:])
+                points = float(tr.find(class_="points").text.replace(",", "."))
+                if min_lvl <= lvl <= max_lvl and (village is None or sVillage == village.lower()) and min_score <= evo <= max_score:
+                    shinoobs.append(name)
+            #print("Page " + str(page_number) + " ok")
+        except Exception as ec:
+            print(name.encode("UTF-8"))
+            print(ec)
         return shinoobs
 
 
