@@ -169,7 +169,7 @@ class ShinobiAccess:
         except Exception as error:
             print("Problème à l'envoi au destinataire " + receiver + ".\nErreur : " + str(error))
 
-    def get_shinobis(self, min_page, max_page, min_lvl, max_lvl, village, min_score, max_score):
+    def get_shinobis(self, min_page, max_page, min_lvl, max_lvl, village, min_score, max_score, min_points):
         link = "http://www.shinobi.fr/index.php?page=classement&type=classement_joueurs"
         if village is not None:
             link += '&village=' + village.lower()
@@ -177,7 +177,7 @@ class ShinobiAccess:
 
         time1 = time.time()
         partial_search = partial(self.search_ranking_page, ranking_link=link, min_lvl=min_lvl, max_lvl=max_lvl,
-                                 village=village, min_score=min_score, max_score=max_score)
+                                 village=village, min_score=min_score, max_score=max_score, min_points=min_points)
         pool = ThreadPool()
         shinoobs = pool.map(partial_search, range(min_page, max_page + 1))
         pool.close()
@@ -188,7 +188,7 @@ class ShinobiAccess:
 
         return shinoobs
 
-    def search_ranking_page(self, page_number, ranking_link, min_lvl, max_lvl, village, min_score, max_score):
+    def search_ranking_page(self, page_number, ranking_link, min_lvl, max_lvl, village, min_score, max_score, min_points):
         shinoobs = []
         page = self.session.get(ranking_link + str(page_number))
         soup = BeautifulSoup(page.text, "html.parser")
@@ -202,7 +202,7 @@ class ShinobiAccess:
                 sVillage = tr.find(class_="village").a.span.text
                 evo = int(tr.find(class_="evolution").text[1:])
                 points = float(tr.find(class_="points").text.replace(",", "."))
-                if min_lvl <= lvl <= max_lvl and (village is None or sVillage == village.lower()) and min_score <= evo <= max_score:
+                if min_lvl <= lvl <= max_lvl and (village is None or sVillage == village.lower()) and min_score <= evo <= max_score and points >= min_points:
                     shinoobs.append(name)
             #print("Page " + str(page_number) + " ok")
         except Exception as ec:
@@ -268,8 +268,8 @@ class Controller:
         open("Message.txt", "w", encoding="utf-8").write(
             "[Sujet]\n" + title + "\n[Message]\n" + message.replace("\r", ""))
 
-    def search_ranking(self, min_page=1, max_page=600, min_lvl=100, max_lvl=100, village="Chikara", min_score=0, max_score=99999):
-        shinobis = self.shinobiAccess.get_shinobis(min_page, max_page, min_lvl, max_lvl, village, min_score, max_score)
+    def search_ranking(self, min_page=0, max_page=1000, min_lvl=100, max_lvl=100, village="Chikara", min_score=0, max_score=99999, min_points=0):
+        shinobis = self.shinobiAccess.get_shinobis(min_page, max_page, min_lvl, max_lvl, village, min_score, max_score, min_points)
         open("Shinobis.txt", "w", encoding="utf-8").write("\n".join(shinobis))
         return shinobis
 
