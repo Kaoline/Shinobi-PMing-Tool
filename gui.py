@@ -36,8 +36,178 @@ class SearchingFrame(Frame):
     def __init__(self, master, controller, **kw):
         super().__init__(master, **kw)
         self.controller = controller
+
+        self.time_estimation = StringVar()
+        self.search_state = StringVar()
+
         self.master.title("Où sont les shinobis ?")
+        self.build_frame()
+
         self.master.mainloop()
+
+    def build_frame(self):
+        # Options frame
+        options_frame = Frame(self.master)
+        options_frame.grid(row=0, rowspan=2, column=0, padx=20)
+
+        self.build_options(options_frame)
+
+        # File frame
+        file_frame = Frame(self.master)
+        file_frame.grid(row=0, column=1, padx=20, pady=10)
+
+        Label(file_frame, text="Nom du fichier de sauvegarde : ").pack(side=LEFT)
+
+        self.file_entry = Entry(file_frame, width=20)
+        self.file_entry.pack(side=LEFT)
+        self.file_entry.insert(0, "Shinobis.txt")
+
+        # Results frame
+        result_frame = Frame(self.master)
+        result_frame.grid(row=1, column=1, padx=20, pady=10)
+
+        Label(result_frame, text="Résultats").pack()
+
+        self.result_text = Text(result_frame, width=30)
+        self.result_text.pack()
+
+        # Buttons frame
+        buttons_frame = Frame(self.master)
+        buttons_frame.grid(row=3, column=0, columnspan=2, pady=20)
+
+        Label(buttons_frame, text="Temps estimé à la grosse louche (secondes) :").pack()
+        Label(buttons_frame, textvariable=self.time_estimation).pack()
+
+        Button(buttons_frame, text="Rechercher", command=self.search).pack()
+
+        Label(buttons_frame, textvariable=self.search_state).pack()
+
+    def build_options(self, options_frame):
+        # Label
+        Label(options_frame, text="Options de recherche").pack()
+
+        # Border
+        options_sub_frame = Frame(options_frame, width=20)
+        options_sub_frame.pack()
+
+        # Pages
+        pages_frame = Frame(options_sub_frame)
+        pages_frame.pack()
+
+        Label(pages_frame, text="Pages ").pack(side=LEFT)
+
+        self.start_page_value = StringVar()
+        self.start_page_value.trace("w", lambda *args: self.estimate_time())
+        Entry(pages_frame, textvariable=self.start_page_value, width=5).pack(side=LEFT)
+
+        Label(pages_frame, text=" à ").pack(side=LEFT)
+
+        self.end_page_value = StringVar()
+        self.end_page_value.trace("w", lambda *args: self.estimate_time())
+        Entry(pages_frame, textvariable=self.end_page_value, width=5).pack(side=LEFT)
+
+        self.start_page_value.set("1")
+        self.end_page_value.set("100")
+
+        # Ranking
+        ranking_frame = Frame(options_sub_frame)
+        ranking_frame.pack()
+
+        Label(ranking_frame, text="Classement").pack()
+
+        self.ranking_choice = StringVar()
+        self.ranking_choice.set("general")
+        Radiobutton(ranking_frame, text="Général", variable=self.ranking_choice, value="general").pack(anchor=W)
+        Radiobutton(ranking_frame, text="Hebdomadaire", variable=self.ranking_choice, value="weekly").pack(anchor=W)
+
+        # Level
+        level_frame = Frame(options_sub_frame)
+        level_frame.pack()
+
+        Label(level_frame, text="Niveau ").pack(side=LEFT)
+
+        self.start_level_entry = Entry(level_frame, width=5)
+        self.start_level_entry.pack(side=LEFT)
+        self.start_level_entry.insert(0, 1)
+
+        Label(level_frame, text=" à ").pack(side=LEFT)
+
+        self.end_level_entry = Entry(level_frame, width=5)
+        self.end_level_entry.pack(side=LEFT)
+        self.end_level_entry.insert(0, 100)
+
+        # Village
+        village_frame = Frame(options_sub_frame)
+        village_frame.pack()
+
+        Label(village_frame, text="Village").pack()
+
+        self.village_choice = StringVar()
+        self.village_choice.set("all")
+        Radiobutton(village_frame, text="Tous", variable=self.village_choice, value="all").pack(anchor=W)
+        Radiobutton(village_frame, text="Chikara", variable=self.village_choice, value="chikara").pack(anchor=W)
+        Radiobutton(village_frame, text="Mahou", variable=self.village_choice, value="mahou").pack(anchor=W)
+        Radiobutton(village_frame, text="Gensou", variable=self.village_choice, value="gensou").pack(anchor=W)
+
+        # Score
+        score_frame = Frame(options_sub_frame)
+        score_frame.pack()
+
+        Label(score_frame, text="Points minimum : ").pack(side=LEFT)
+
+        self.start_score_entry = Entry(score_frame, width=7)
+        self.start_score_entry.pack(side=LEFT)
+        self.start_score_entry.insert(0, 0)
+
+        # Evo
+        evo_frame = Frame(options_sub_frame)
+        evo_frame.pack()
+
+        Label(evo_frame, text="Evo de ").pack(side=LEFT)
+
+        self.start_evo_entry = Entry(evo_frame, width=7)
+        self.start_evo_entry.pack(side=LEFT)
+        self.start_evo_entry.insert(0, 0)
+
+        Label(evo_frame, text=" à ").pack(side=LEFT)
+
+        self.end_evo_entry = Entry(evo_frame, width=7)
+        self.end_evo_entry.pack(side=LEFT)
+        self.end_evo_entry.insert(0, 99999)
+
+    def estimate_time(self):
+        try:
+            min_page = int(self.start_page_value.get())
+            max_page = int(self.end_page_value.get())
+            pages = max_page - min_page + 1
+            time = pages / 20 if pages <= 1000 else pages / 10
+            self.time_estimation.set(str(time))
+        except ValueError:
+            print()
+
+    def search(self):
+        def callback():
+            result = self.controller.search_ranking(
+                file=self.file_entry.get(),
+                ranking=self.ranking_choice.get(),
+                min_page=int(self.start_page_value.get()),
+                max_page=int(self.end_page_value.get()),
+                min_lvl=int(self.start_level_entry.get()),
+                max_lvl=int(self.end_level_entry.get()),
+                village=self.village_choice.get() if self.village_choice.get() != "all" else None,
+                min_evo=int(self.start_evo_entry.get()),
+                max_evo=int(self.end_evo_entry.get()),
+                min_points=int(self.start_score_entry.get())
+            )
+            self.search_state.set("")
+            self.result_text.delete(1.0, END)
+            self.result_text.insert(END, "\n".join(result))
+            messagebox.showinfo("Fini !", "Recherche effectuée.")
+
+        self.search_state.set(waiting_message)
+        self.after(10, callback)
+
+
 class ConfigMessageFrame(Frame):
     def __init__(self, master, controller, **kw):
         super().__init__(master, **kw)
