@@ -36,6 +36,7 @@ class ShinobiAccess:
     # PMer
     def send_message(self, receiver, title, message_content):
         """Needs connection"""
+        print("Starting at " + time.strftime("%H:%M:%S"))
         try:
             if self.encoding is None:
                 self.get_encoding()
@@ -46,9 +47,11 @@ class ShinobiAccess:
             self.session.post('http://www.shinobi.fr/index.php?page=menu-messagerie', payload)
         except Exception as error:
             print("Problème à l'envoi au destinataire " + receiver + ".\nErreur : " + str(error))
+        print("Finished at " + time.strftime("%H:%M:%S"))
 
     def get_shinobis(self, min_page, max_page, min_lvl, max_lvl, village, min_score, max_score, min_points):
     # Ranking search
+        print("Starting at " + time.strftime("%H:%M:%S"))
         link = "http://www.shinobi.fr/index.php?page=classement&type=classement_joueurs"
         if village is not None:
             link += '&village=' + village.lower()
@@ -64,6 +67,7 @@ class ShinobiAccess:
         shinoobs = [item for sublist in shinoobs for item in sublist]
         time2 = time.time()
         print("Temps de recherche (secondes) : " + str(time2 - time1))
+        print("Finished at " + time.strftime("%H:%M:%S"))
 
         return shinoobs
 
