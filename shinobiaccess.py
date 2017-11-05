@@ -14,7 +14,7 @@ import time
 class ShinobiAccess:
     """Interface with Shinobi.fr, to connect, send messages and do some ranking searches"""
 
-# Connection block
+    # Connection block
     def __init__(self):
         self.session = requests.Session()
         self.connected = False
@@ -33,8 +33,7 @@ class ShinobiAccess:
             self.login = login
         return self.connected
 
-
-# PMer
+    # PMer
     def send_message(self, receiver, title, message_content):
         """Needs connection"""
         try:
@@ -48,9 +47,8 @@ class ShinobiAccess:
         except Exception as error:
             print("Problème à l'envoi au destinataire " + receiver + ".\nErreur : " + str(error))
 
-
-# Ranking search
     def get_shinobis(self, min_page, max_page, min_lvl, max_lvl, village, min_score, max_score, min_points):
+    # Ranking search
         link = "http://www.shinobi.fr/index.php?page=classement&type=classement_joueurs"
         if village is not None:
             link += '&village=' + village.lower()
@@ -85,7 +83,7 @@ class ShinobiAccess:
                 points = float(tr.find(class_="points").text.replace(",", "."))
                 if min_lvl <= lvl <= max_lvl and (village is None or sVillage == village.lower()) and min_score <= evo <= max_score and points >= min_points:
                     shinoobs.append(name)
-            #print("Page " + str(page_number) + " ok")
+                    # print("Page " + str(page_number) + " ok")
         except Exception as ec:
             print(name.encode("UTF-8"))
             print(ec)

@@ -21,6 +21,7 @@ class Controller:
     def show_pmer(self):
         root = Tk()
         self.message_frame = gui.ConfigMessageFrame(root, controller)
+    # PMing
 
     def send_pm(self, names_list, title, message):
         message = message.replace("\n", os.linesep)
@@ -41,6 +42,7 @@ class Controller:
 
             messagebox.showinfo("Fini !", "Message envoyé aux " + str(len(receivers)) + " shinobis.")
 
+    # Login
     def connect(self, login, password):
         return self.shinobiAccess.connect(login, password)
 
