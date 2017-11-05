@@ -21,6 +21,14 @@ class Controller:
     def show_pmer(self):
         root = Tk()
         self.message_frame = gui.ConfigMessageFrame(root, controller)
+    # Searching
+    def search_ranking(self, file="Shinobis.txt", ranking="general", min_page=0, max_page=10, min_lvl=100, max_lvl=100,
+                       village="Chikara", min_evo=0, max_evo=99999, min_points=0):
+        shinobis = self.shinobiAccess.get_shinobis(ranking, min_page, max_page, min_lvl, max_lvl, village, min_evo,
+                                                   max_evo, min_points)
+        open(file, "w", encoding="utf-8").write("\n".join(shinobis))
+        return shinobis
+
     # PMing
 
     def send_pm(self, names_list, title, message):
@@ -42,11 +50,6 @@ class Controller:
     # Login
     def connect(self, login, password):
         return self.shinobiAccess.connect(login, password)
-
-    def search_ranking(self, min_page=0, max_page=100, min_lvl=100, max_lvl=100, village="Chikara", min_score=0, max_score=99999, min_points=0):
-        shinobis = self.shinobiAccess.get_shinobis(min_page, max_page, min_lvl, max_lvl, village, min_score, max_score, min_points)
-        open("Shinobis.txt", "w", encoding="utf-8").write("\n".join(shinobis))
-        return shinobis
 
 
 # -----------------------------------------

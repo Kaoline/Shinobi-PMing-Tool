@@ -49,17 +49,19 @@ class ShinobiAccess:
             print("Problème à l'envoi au destinataire " + receiver + ".\nErreur : " + str(error))
         print("Finished at " + time.strftime("%H:%M:%S"))
 
-    def get_shinobis(self, min_page, max_page, min_lvl, max_lvl, village, min_score, max_score, min_points):
     # Ranking search
+    def get_shinobis(self, ranking, min_page, max_page, min_lvl, max_lvl, village, min_evo, max_evo, min_points):
         print("Starting at " + time.strftime("%H:%M:%S"))
         link = "http://www.shinobi.fr/index.php?page=classement&type=classement_joueurs"
+        if ranking == "weekly":
+            link += "_hebdomadaire"
         if village is not None:
             link += '&village=' + village.lower()
         link += "&p="
 
         time1 = time.time()
         partial_search = partial(self.search_ranking_page, ranking_link=link, min_lvl=min_lvl, max_lvl=max_lvl,
-                                 village=village, min_score=min_score, max_score=max_score, min_points=min_points)
+                                 village=village, min_evo=min_evo, max_evo=max_evo, min_points=min_points)
         pool = ThreadPool()
         shinoobs = pool.map(partial_search, range(min_page, max_page + 1))
         pool.close()
@@ -71,7 +73,7 @@ class ShinobiAccess:
 
         return shinoobs
 
-    def search_ranking_page(self, page_number, ranking_link, min_lvl, max_lvl, village, min_score, max_score, min_points):
+    def search_ranking_page(self, page_number, ranking_link, min_lvl, max_lvl, village, min_evo, max_evo, min_points):
         shinoobs = []
         page = self.session.get(ranking_link + str(page_number))
         soup = BeautifulSoup(page.text, "html.parser")
@@ -85,7 +87,7 @@ class ShinobiAccess:
                 sVillage = tr.find(class_="village").a.span.text
                 evo = int(tr.find(class_="evolution").text[1:])
                 points = float(tr.find(class_="points").text.replace(",", ""))
-                if min_lvl <= lvl <= max_lvl and (village is None or sVillage == village.lower()) and min_score <= evo <= max_score and points >= min_points:
+                if min_lvl <= lvl <= max_lvl and (village is None or sVillage == village.lower()) and min_evo <= evo <= max_evo and points >= min_points:
                     shinoobs.append(name)
                     # print("Page " + str(page_number) + " ok")
         except Exception as ec:
