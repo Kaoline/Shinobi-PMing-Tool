@@ -30,17 +30,14 @@ class Controller:
         confirm = messagebox.askyesno("Vraiment ?",
                                       message="Envoyer le message avec le compte " + self.shinobiAccess.login + " ?")
         if confirm:
-            receivers = names_list.split("\n")
-            print("Envoi du message. Estimation : " + str(len(receivers) * 0.075) + " secondes.")
+            print("Envoi du message. Estimation : " + str(len(names_list) * 0.075) + " secondes.")
 
             time1 = time.time()
             pool = ThreadPool()
-            pool.map(partial(self.shinobiAccess.send_message, title=title, message_content=message), receivers)
+            pool.map(partial(self.shinobiAccess.send_message, title=title, message_content=message), names_list)
             pool.close()
             time2 = time.time()
             print("Temps d'envoi : " + str(time2 - time1))
-
-            messagebox.showinfo("Fini !", "Message envoyé aux " + str(len(receivers)) + " shinobis.")
 
     # Login
     def connect(self, login, password):

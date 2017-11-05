@@ -15,6 +15,7 @@ class ConfigMessageFrame(Frame):
     def __init__(self, master, controller, **kw):
         super().__init__(master, **kw)
         self.controller = controller
+        self.send_state = StringVar()
 
         self.master.title("Un MP, deux MPs, trois MPs...")
 
@@ -61,6 +62,8 @@ class ConfigMessageFrame(Frame):
         send_button = Button(buttons_frame, text="Envoyer", command=self.send_pm)
         send_button.grid(row=0, column=1, padx=20)
 
+        Label(buttons_frame, textvariable=self.send_state).grid(columnspan=2)
+
     def load_receivers(self):
         names_list = fs.load_receivers()
         self.receivers_Text.insert(CURRENT, names_list)
@@ -81,10 +84,18 @@ class ConfigMessageFrame(Frame):
         messagebox.showinfo("C'est dans la boîte !", message="Sauvegarde effectuée")
 
     def send_pm(self):
-        names_list = self.receivers_Text.get(1.0, END).rstrip("\n")
-        title = self.title_entry.get()
-        message = self.message_text.get(1.0, END).rstrip("\n")
-        self.controller.send_pm(names_list, title, message)
+        def callback():
+            names_list = self.receivers_Text.get(1.0, END).rstrip("\n")
+            title = self.title_entry.get()
+            message = self.message_text.get(1.0, END).rstrip("\n")
+
+            receivers = names_list.split("\n")
+            self.controller.send_pm(receivers, title, message)
+            self.send_state.set("")
+            messagebox.showinfo("Fini !", "Message envoyé aux " + str(len(receivers)) + " shinobis.")
+
+        self.send_state.set(waiting_message)
+        self.after(10, callback)
 
 
 class LoginFrame(Frame):
