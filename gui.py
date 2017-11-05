@@ -11,6 +11,33 @@ import filesystem as fs
 waiting_message = "Opération en cours... Ça peut être long, et ça bloque la fenêtre."
 
 
+class OpeningFrame(Frame):
+    def __init__(self, master, controller, **kw):
+        super().__init__(master, **kw)
+        self.controller = controller
+
+        self.master.title("Quel est le programme ?")
+        self.build_frame()
+
+        self.master.mainloop()
+
+    def build_frame(self):
+        main_frame = Frame(self.master)
+        main_frame.grid()
+
+        research_button = Button(main_frame, text="Faire une recherche", command=self.controller.show_search)
+        research_button.grid(row=0, column=0, padx=20, pady=20)
+
+        pm_button = Button(main_frame, text="Envoyer un MP", command=self.controller.show_pmer)
+        pm_button.grid(row=1, column=0, padx=20, pady=20)
+
+
+class SearchingFrame(Frame):
+    def __init__(self, master, controller, **kw):
+        super().__init__(master, **kw)
+        self.controller = controller
+        self.master.title("Où sont les shinobis ?")
+        self.master.mainloop()
 class ConfigMessageFrame(Frame):
     def __init__(self, master, controller, **kw):
         super().__init__(master, **kw)
