@@ -8,6 +8,9 @@ import filesystem as fs
 # -----------------------------------------
 # GUI
 # -----------------------------------------
+waiting_message = "Opération en cours... Ça peut être long, et ça bloque la fenêtre."
+
+
 class ConfigMessageFrame(Frame):
     def __init__(self, master, controller, **kw):
         super().__init__(master, **kw)
@@ -111,7 +114,7 @@ class LoginFrame(Frame):
         self.password_entry = Entry(main_frame, show="*")
         self.password_entry.grid(row=1, column=1, pady=10)
 
-        ok_button = Button(main_frame, text="Connection", command=self.connect)
+        ok_button = Button(main_frame, text="Connexion", command=self.connect)
         ok_button.grid(row=2, columnspan=2)
 
         self.error_label = Label(main_frame, fg="red")
