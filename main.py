@@ -52,13 +52,11 @@ class Controller:
 # -----------------------------------------
 # Main
 # -----------------------------------------
-print("Starting at " + time.strftime("%H:%M:%S"))
 controller = Controller()
 controller.show_pmer()
 
 # shinobis = controller.search_ranking()
 # print(len(shinobis))
-# print("Finished at " + time.strftime("%H:%M:%S"))
 
 # Run this in cmd to obtain executable
 # pyinstaller --clean main.py
