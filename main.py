@@ -18,10 +18,15 @@ class Controller:
     def __init__(self):
         self.shinobiAccess = sa.ShinobiAccess()
 
-    def show_pmer(self):
+    # First frame
+    def show_choice(self):
         root = Tk()
-        self.message_frame = gui.ConfigMessageFrame(root, controller)
+        gui.OpeningFrame(root, controller)
+
     # Searching
+    def show_search(self):
+        gui.SearchingFrame(Toplevel(), controller)
+
     def search_ranking(self, file="Shinobis.txt", ranking="general", min_page=0, max_page=10, min_lvl=100, max_lvl=100,
                        village="Chikara", min_evo=0, max_evo=99999, min_points=0):
         shinobis = self.shinobiAccess.get_shinobis(ranking, min_page, max_page, min_lvl, max_lvl, village, min_evo,
@@ -30,6 +35,8 @@ class Controller:
         return shinobis
 
     # PMing
+    def show_pmer(self):
+        gui.ConfigMessageFrame(Toplevel(), controller)
 
     def send_pm(self, names_list, title, message):
         message = message.replace("\n", os.linesep)
@@ -57,7 +64,9 @@ class Controller:
 # -----------------------------------------
 print("Starting at " + time.strftime("%H:%M:%S"))
 controller = Controller()
-controller.show_pmer()
+# controller.show_choice()
+controller.show_search()
+# controller.show_pmer()
 
 # shinobis = controller.search_ranking()
 # print(len(shinobis))
