@@ -59,4 +59,4 @@ controller.show_pmer()
 # print(len(shinobis))
 
 # Run this in cmd to obtain executable
-# pyinstaller --clean main.py
+# pyinstaller --clean --onefile --name ShinobiTool main.py
