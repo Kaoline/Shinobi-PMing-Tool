@@ -3,7 +3,7 @@ build/
 dist/
 .idea/
 __pycache__/
-ShinobiTool.spec
 Destinataires.txt
 Message.txt
 Shinobis.txt
+main.spec

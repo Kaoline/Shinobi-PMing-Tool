@@ -62,7 +62,6 @@ class Controller:
 # -----------------------------------------
 # Main
 # -----------------------------------------
-print("Starting at " + time.strftime("%H:%M:%S"))
 controller = Controller()
 # controller.show_choice()
 controller.show_search()
@@ -70,7 +69,6 @@ controller.show_search()
 
 # shinobis = controller.search_ranking()
 # print(len(shinobis))
-# print("Finished at " + time.strftime("%H:%M:%S"))
 
 # Run this in cmd to obtain executable
-# pyinstaller --clean main.py
+# pyinstaller --clean --onefile --name ShinobiTool main.py
