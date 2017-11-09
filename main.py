@@ -63,12 +63,9 @@ class Controller:
 # Main
 # -----------------------------------------
 controller = Controller()
-# controller.show_choice()
-controller.show_search()
+controller.show_choice()
+# controller.show_search()
 # controller.show_pmer()
-
-# shinobis = controller.search_ranking()
-# print(len(shinobis))
 
 # Run this in cmd to obtain executable
 # pyinstaller --clean --onefile --name ShinobiTool main.py
