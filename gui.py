@@ -83,6 +83,11 @@ class SearchingFrame(Frame):
         Label(buttons_frame, textvariable=self.search_state).pack()
 
     def build_options(self, options_frame):
+        padding=5
+        margin=5
+        border_color="black"
+        border_width=1
+
         # Label
         Label(options_frame, text="Options de recherche").pack()
 
@@ -91,10 +96,10 @@ class SearchingFrame(Frame):
         options_sub_frame.pack()
 
         # Pages
-        pages_frame = Frame(options_sub_frame)
-        pages_frame.pack()
+        pages_frame = Frame(options_sub_frame, padx=margin, pady=margin, highlightbackground=border_color, highlightthickness=border_width)
+        pages_frame.pack(padx=padding, pady=padding, fill=X)
 
-        Label(pages_frame, text="Pages ").pack(side=LEFT)
+        Label(pages_frame, text="Pages ").pack(side=LEFT, anchor=CENTER)
 
         self.start_page_value = StringVar()
         self.start_page_value.trace("w", lambda *args: self.estimate_time())
@@ -110,10 +115,10 @@ class SearchingFrame(Frame):
         self.end_page_value.set("100")
 
         # Ranking
-        ranking_frame = Frame(options_sub_frame)
-        ranking_frame.pack()
+        ranking_frame = Frame(options_sub_frame, padx=margin, pady=margin, highlightbackground=border_color, highlightthickness=border_width)
+        ranking_frame.pack(padx=padding, pady=padding, fill=X)
 
-        Label(ranking_frame, text="Classement").pack()
+        Label(ranking_frame, text="Classement").pack(side="left")
 
         self.ranking_choice = StringVar()
         self.ranking_choice.set("general")
@@ -121,8 +126,8 @@ class SearchingFrame(Frame):
         Radiobutton(ranking_frame, text="Hebdomadaire", variable=self.ranking_choice, value="weekly").pack(anchor=W)
 
         # Level
-        level_frame = Frame(options_sub_frame)
-        level_frame.pack()
+        level_frame = Frame(options_sub_frame, padx=margin, pady=margin, highlightbackground=border_color, highlightthickness=border_width)
+        level_frame.pack(padx=padding, pady=padding, fill=X)
 
         Label(level_frame, text="Niveau ").pack(side=LEFT)
 
@@ -137,10 +142,10 @@ class SearchingFrame(Frame):
         self.end_level_entry.insert(0, 100)
 
         # Village
-        village_frame = Frame(options_sub_frame)
-        village_frame.pack()
+        village_frame = Frame(options_sub_frame, padx=margin, pady=margin, highlightbackground=border_color, highlightthickness=border_width)
+        village_frame.pack(padx=padding, pady=padding, fill=X)
 
-        Label(village_frame, text="Village").pack()
+        Label(village_frame, text="Classement\nvillage").pack(side="left")
 
         self.village_choice = StringVar()
         self.village_choice.set("all")
@@ -150,8 +155,8 @@ class SearchingFrame(Frame):
         Radiobutton(village_frame, text="Gensou", variable=self.village_choice, value="gensou").pack(anchor=W)
 
         # Score
-        score_frame = Frame(options_sub_frame)
-        score_frame.pack()
+        score_frame = Frame(options_sub_frame, padx=margin, pady=margin, highlightbackground=border_color, highlightthickness=border_width)
+        score_frame.pack(padx=padding, pady=padding, fill=X)
 
         Label(score_frame, text="Points minimum : ").pack(side=LEFT)
 
@@ -160,8 +165,8 @@ class SearchingFrame(Frame):
         self.start_score_entry.insert(0, 0)
 
         # Evo
-        evo_frame = Frame(options_sub_frame)
-        evo_frame.pack()
+        evo_frame = Frame(options_sub_frame, padx=margin, pady=margin, highlightbackground=border_color, highlightthickness=border_width)
+        evo_frame.pack(padx=padding, pady=padding, fill=X)
 
         Label(evo_frame, text="Evo de ").pack(side=LEFT)
 
@@ -202,7 +207,7 @@ class SearchingFrame(Frame):
             self.search_state.set("")
             self.result_text.delete(1.0, END)
             self.result_text.insert(END, "\n".join(result))
-            messagebox.showinfo("Fini !", "Recherche effectuée.")
+            messagebox.showinfo("Fini !", "Recherche effectuée.\nJ'ai trouvé " + str(len(result)) + " shinobis !")
 
         self.search_state.set(waiting_message)
         self.after(10, callback)
