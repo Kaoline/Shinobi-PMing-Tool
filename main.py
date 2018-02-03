@@ -46,6 +46,7 @@ class Controller:
                                       message="Envoyer le message avec le compte " + self.shinobiAccess.login + " ?")
         if confirm:
             print("Envoi du message. Estimation : " + str(len(names_list) * 0.075) + " secondes.")
+            print("Starting at " + time.strftime("%H:%M:%S"))
 
             time1 = time.time()
             pool = ThreadPool()
@@ -53,6 +54,7 @@ class Controller:
             pool.close()
             time2 = time.time()
             print("Temps d'envoi : " + str(time2 - time1))
+            print("Finished at " + time.strftime("%H:%M:%S"))
 
     # Deleting PMs
     def delete_pms(self, login, password, nbToDelete):

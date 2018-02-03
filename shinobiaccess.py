@@ -36,7 +36,7 @@ class ShinobiAccess:
     # PMer
     def send_message(self, receiver, title, message_content):
         """Needs connection"""
-        print("Starting at " + time.strftime("%H:%M:%S"))
+        # print("Starting at " + time.strftime("%H:%M:%S"))
         try:
             if self.encoding is None:
                 self.get_encoding()
@@ -47,7 +47,7 @@ class ShinobiAccess:
             self.session.post('http://www.shinobi.fr/index.php?page=menu-messagerie', payload)
         except Exception as error:
             print("Problème à l'envoi au destinataire " + receiver + ".\nErreur : " + str(error))
-        print("Finished at " + time.strftime("%H:%M:%S"))
+        # print("Finished at " + time.strftime("%H:%M:%S"))
 
     # Ranking search
     def get_shinobis(self, ranking, min_page, max_page, min_lvl, max_lvl, village, min_evo, max_evo, min_points):
