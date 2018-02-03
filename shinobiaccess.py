@@ -94,3 +94,22 @@ class ShinobiAccess:
             print(name.encode("UTF-8"))
             print(ec)
         return shinoobs
+
+    # Delete PMs
+    def wipe_pms(self, nbToDelete):
+        nbPages = nbToDelete // 20
+        nbMessagesLastPage = nbToDelete % 20
+
+        for page in range(nbPages):
+            self.delete_message(20)
+            print("Page " + str(page+1) + "/" + str(nbPages) + " deleted")
+        self.delete_message(nbMessagesLastPage)
+        print(str(nbMessagesLastPage) + " messages from last page deleted. " + str(nbToDelete) + " total pages deleted.")
+
+    def delete_message(self, nbToDelete):
+        page = self.session.get("http://www.shinobi.fr/index.php?page=menu-messagerie")
+        soup = BeautifulSoup(page.text, "html.parser")
+        table = soup.find(id="messagerie")
+        for tr in table.find_all("tr")[1:nbToDelete+1]:
+            suppr = tr.find_all(class_="icon")[1].a["href"]
+            self.session.get("http://www.shinobi.fr/" + suppr)

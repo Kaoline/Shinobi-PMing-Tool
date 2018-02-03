@@ -54,6 +54,11 @@ class Controller:
             time2 = time.time()
             print("Temps d'envoi : " + str(time2 - time1))
 
+    # Deleting PMs
+    def delete_pms(self, login, password, nbToDelete):
+        self.connect(login, password)
+        self.shinobiAccess.wipe_pms(nbToDelete)
+
     # Login
     def connect(self, login, password):
         return self.shinobiAccess.connect(login, password)
@@ -66,6 +71,7 @@ controller = Controller()
 controller.show_choice()
 # controller.show_search()
 # controller.show_pmer()
+# controller.delete_pms(, , )
 
 # Run this in cmd to obtain executable
 # pyinstaller --clean --onefile --name ShinobiTool main.py
