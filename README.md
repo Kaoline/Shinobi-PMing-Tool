@@ -9,7 +9,7 @@ Permet de créer une liste de pseudos en parcourant le classement sur certains c
 - fourchette de niveau
 - points minimum (dépend du classement général ou hebdo)
 - fourchette d'évolution du jour
-Affiche la liste dans l'outil et l'enregistre dans le fichier dont on a précisé le nom.
+\nAffiche la liste dans l'outil et l'enregistre dans le fichier dont on a précisé le nom.
 
 ## L'outil d'envoi de MP
 On entre les destinataires (un par ligne - potentiellement récupérés avec l'outil recherche), le sujet du MP, le contenu, on entre les identifiants du compte servant à envoyer le MP et on envoie !

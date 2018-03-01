@@ -1,4 +1,7 @@
 # file --main.py--
+# version 2.1
+# python 3.6
+
 import os
 from multiprocessing import Queue  # Resolves Import errors
 from multiprocessing.dummy import Pool as ThreadPool
@@ -73,7 +76,7 @@ controller = Controller()
 controller.show_choice()
 # controller.show_search()
 # controller.show_pmer()
-# controller.delete_pms(, , )
+# controller.delete_pms("", "", )
 
 # Run this in cmd to obtain executable
 # pyinstaller --clean --onefile --name ShinobiTool main.py
