@@ -254,9 +254,12 @@ class ConfigMessageFrame(Frame):
         self.message_text = Text(message_frame, width=50)
         self.message_text.pack()
 
+        pseudo_info = Label(message_frame, text="La variable %pseudo% sera remplacée par le pseudo du destinataire dans le message et/ou le sujet !")
+        pseudo_info.pack(pady=20)
+
         # Buttons
         buttons_frame = Frame(self.master)
-        buttons_frame.grid(row=1, column=0, columnspan=2, pady=20)
+        buttons_frame.grid(row=2, column=0, columnspan=2, pady=20)
 
         save_button = Button(buttons_frame, text="Sauvegarder", command=self.save_everything)
         save_button.grid(row=0, column=0, padx=20)
