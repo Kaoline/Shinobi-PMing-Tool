@@ -38,6 +38,9 @@ class ShinobiAccess:
         """Needs connection"""
         # print("Starting at " + time.strftime("%H:%M:%S"))
         try:
+            title = title.replace("%pseudo%", receiver)
+            message_content = message_content.replace("%pseudo%", receiver)
+
             if self.encoding is None:
                 self.get_encoding()
             self.session.get('http://www.shinobi.fr/index.php?page=menu-messagerie-nouveau')
