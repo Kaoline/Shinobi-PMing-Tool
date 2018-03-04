@@ -11,6 +11,7 @@ from tkinter import messagebox
 import time
 
 import shinobiaccess as sa
+from config import *
 import frameopening
 import framelogin
 import framesearching
@@ -24,6 +25,7 @@ import constants
 class Controller:
     def __init__(self):
         self.shinobiAccess = sa.ShinobiAccess()
+        Config.load()
 
     # First frame
     def show_choice(self):
