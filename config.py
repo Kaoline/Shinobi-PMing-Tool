@@ -6,10 +6,11 @@ import hashlib
 
 class Config:
     pswd = ""
+    accounts = {}
 
     @staticmethod
     def load():
-        Config.pswd = filesystem.load_config()
+        (Config.pswd, Config.accounts) = filesystem.load_config()
 
     @staticmethod
     def has_pm_access():

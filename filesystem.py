@@ -38,10 +38,15 @@ def load_config():
         open(constants.default_config_file, "x", encoding="utf-8").close()
     config_content = [line.rstrip('\n') for line in open(constants.default_config_file, "r", encoding="utf-8")]
 
+    accounts = {}
     global_pswd = ""
     try:
         if not config_content[0].startswith("["):
             global_pswd = config_content[0]
+        for line in config_content:
+            match = re.match(r"\[(.*)\]:\[(.*)\]", line)
+            if match:
+                accounts[match.group(1)] = match.group(2)
     except Exception:
         print("Pas de config valide.")
-    return global_pswd
+    return (global_pswd, accounts)
