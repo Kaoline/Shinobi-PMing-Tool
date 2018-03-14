@@ -48,7 +48,8 @@ class Controller:
         confirm = messagebox.askyesno("Vraiment ?",
                                       message="Envoyer le message avec le compte " + self.shinobiAccess.login + " ?")
         if confirm:
-            print("Envoi du message. Estimation : " + str(len(names_list) * 0.075) + " secondes.")
+            est_time = len(names_list) * 0.075
+            print("Envoi du message. Estimation : " + "{0:.2f}".format(est_time) + " secondes (soit "+ "{0:.2f}".format(est_time / 60)+" minutes).")
             print("Starting at " + time.strftime("%H:%M:%S"))
 
             time1 = time.time()
@@ -56,7 +57,7 @@ class Controller:
             pool.map(partial(self.shinobiAccess.send_message, title=title, message_content=message), names_list)
             pool.close()
             time2 = time.time()
-            print("Temps d'envoi : " + str(time2 - time1))
+            print("Temps d'envoi : " + "{0:.2f}".format(time2 - time1) + "s soit " + "{0:.2f}".format((time2 - time1) / 60) + "min")
             print("Finished at " + time.strftime("%H:%M:%S"))
 
     # Deleting PMs
