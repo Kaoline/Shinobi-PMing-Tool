@@ -11,7 +11,12 @@ from tkinter import messagebox
 import time
 
 import shinobiaccess as sa
-import gui
+import frameopening
+import framelogin
+import framesearching
+import frameconfig
+
+waiting_message = "Opération en cours... Ça peut être long, et ça bloque la fenêtre."
 
 
 # -----------------------------------------
@@ -24,11 +29,11 @@ class Controller:
     # First frame
     def show_choice(self):
         root = Tk()
-        gui.OpeningFrame(root, controller)
+        frameopening.FrameOpening(root, controller)
 
     # Searching
     def show_search(self):
-        gui.SearchingFrame(Toplevel(), controller)
+        framesearching.FrameSearching(Toplevel(), controller)
 
     def search_ranking(self, file="Shinobis.txt", ranking="general", min_page=0, max_page=10, min_lvl=100, max_lvl=100,
                        village="Chikara", min_evo=0, max_evo=99999, min_points=0):
@@ -39,12 +44,12 @@ class Controller:
 
     # PMing
     def show_pmer(self):
-        gui.ConfigMessageFrame(Toplevel(), controller)
+        frameconfig.FrameConfigMessage(Toplevel(), controller)
 
     def send_pm(self, names_list, title, message):
         message = message.replace("\n", os.linesep)
         if not self.shinobiAccess.connected:
-            gui.LoginFrame(Toplevel(), self)
+            framelogin.FrameLogin(Toplevel(), self)
         confirm = messagebox.askyesno("Vraiment ?",
                                       message="Envoyer le message avec le compte " + self.shinobiAccess.login + " ?")
         if confirm:
