@@ -17,7 +17,6 @@ class ShinobiAccess:
     # Connection block
     def __init__(self):
         self.session = requests.Session()
-        self.connected = False
         self.encoding = None
 
     def get_encoding(self):
@@ -26,12 +25,13 @@ class ShinobiAccess:
         self.encoding = re.search('charset=(.*)', soup.head.meta["content"]).group(1)
 
     def connect(self, login, password):
+        self.session.get('http://www.shinobi.fr/index.php?page=deconnexion')
         login_params = {'login': login, 'pass': password}
         r = self.session.post('http://www.shinobi.fr/index.php?page=connexion', login_params)
-        self.connected = r.text.find("<a href='index.php?page=jeu'> Jouer </a>") != -1
-        if self.connected:
+        connected = r.text.find("<a href='index.php?page=jeu'> Jouer </a>") != -1
+        if connected:
             self.login = login
-        return self.connected
+        return connected
 
     # PMer
     def send_message(self, receiver, title, message_content):

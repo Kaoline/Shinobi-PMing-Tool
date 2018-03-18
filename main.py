@@ -49,8 +49,7 @@ class Controller:
 
     def send_pm(self, names_list, title, message):
         message = message.replace("\n", os.linesep)
-        if not self.shinobiAccess.connected:
-            framelogin.FrameLogin(Toplevel(), self)
+        framelogin.FrameLogin(Toplevel(), self)
         confirm = messagebox.askyesno("Vraiment ?",
                                       message="Envoyer le message avec le compte " + self.shinobiAccess.login + " ?")
         if confirm:
