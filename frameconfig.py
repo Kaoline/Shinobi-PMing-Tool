@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import messagebox
 
 import filesystem as fs
-import main
+import constants
 
 
 class FrameConfigMessage(Frame):
@@ -92,5 +92,5 @@ class FrameConfigMessage(Frame):
             self.send_state.set("")
             messagebox.showinfo("Fini !", "Message envoyé aux " + str(len(receivers)) + " shinobis.")
 
-        self.send_state.set(main.waiting_message)
+        self.send_state.set(constants.waiting_message)
         self.after(10, callback)

@@ -2,7 +2,7 @@
 from tkinter import *
 from tkinter import messagebox
 
-import main
+import constants
 
 
 class FrameSearching(Frame):
@@ -33,7 +33,7 @@ class FrameSearching(Frame):
 
         self.file_entry = Entry(file_frame, width=20)
         self.file_entry.pack(side=LEFT)
-        self.file_entry.insert(0, "Shinobis.txt")
+        self.file_entry.insert(0, constants.default_search_file)
 
         # Results frame
         result_frame = Frame(self.master)
@@ -182,5 +182,5 @@ class FrameSearching(Frame):
             self.result_text.insert(END, "\n".join(result))
             messagebox.showinfo("Fini !", "Recherche effectuée.\nJ'ai trouvé " + str(len(result)) + " shinobis !")
 
-        self.search_state.set(main.waiting_message)
+        self.search_state.set(constants.waiting_message)
         self.after(10, callback)

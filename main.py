@@ -15,8 +15,7 @@ import frameopening
 import framelogin
 import framesearching
 import frameconfig
-
-waiting_message = "Opération en cours... Ça peut être long, et ça bloque la fenêtre."
+import constants
 
 
 # -----------------------------------------
@@ -35,7 +34,7 @@ class Controller:
     def show_search(self):
         framesearching.FrameSearching(Toplevel(), controller)
 
-    def search_ranking(self, file="Shinobis.txt", ranking="general", min_page=0, max_page=10, min_lvl=100, max_lvl=100,
+    def search_ranking(self, file=constants.default_search_file, ranking="general", min_page=0, max_page=10, min_lvl=100, max_lvl=100,
                        village="Chikara", min_evo=0, max_evo=99999, min_points=0):
         shinobis = self.shinobiAccess.get_shinobis(ranking, min_page, max_page, min_lvl, max_lvl, village, min_evo,
                                                    max_evo, min_points)
