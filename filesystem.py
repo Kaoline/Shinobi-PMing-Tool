@@ -50,3 +50,14 @@ def load_config():
     except Exception:
         print("Pas de config valide.")
     return (global_pswd, accounts)
+
+
+def save_config(accounts):
+    stream = open(constants.default_config_file, "r+", encoding="utf-8")
+    firstline = stream.readline().rstrip('\n')
+    stream.seek(0)
+    if not firstline.startswith("["):
+        stream.write(firstline)
+    for login in accounts:
+        stream.write("\n[" + login + "]:[" + accounts[login] + "]")
+    stream.close()

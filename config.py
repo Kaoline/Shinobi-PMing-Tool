@@ -19,3 +19,8 @@ class Config:
         if not has_access:
             print("Mot de passe pour le MPeur incorrect. Envoyez un MP à Kazue pour l'avoir.")
         return has_access
+
+    @staticmethod
+    def add_account(login, password):
+        Config.accounts[login] = password
+        filesystem.save_config(Config.accounts)
