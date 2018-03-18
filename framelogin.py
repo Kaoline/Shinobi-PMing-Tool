@@ -8,6 +8,7 @@ class FrameLogin(Frame):
     def __init__(self, master, controller, **kw):
         super().__init__(master, **kw)
         self.controller = controller
+        self.controller.deconnect()
 
         self.connect_account = StringVar()
         self.connect_account.set("-1")
@@ -16,8 +17,6 @@ class FrameLogin(Frame):
         self.master.title("Qui êtes-vous ?")
 
         self.build_frame()
-
-        self.master.mainloop()
 
     def build_frame(self):
         main_frame = Frame(self.master)
@@ -64,6 +63,6 @@ class FrameLogin(Frame):
         if connected:
             if new_acc and self.save_account.get():
                 Config.add_account(login, password)
-            self.master.quit()
+            self.master.destroy()
         else:
             self.error_label.configure(text="Problème d'identifiants, veuillez réessayer.")

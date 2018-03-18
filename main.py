@@ -47,11 +47,14 @@ class Controller:
     def show_pmer(self):
         frameconfig.FrameConfigMessage(Toplevel(), controller)
 
-    def send_pm(self, names_list, title, message):
+    def send_pm(self, names_list, title, message, waiting_window):
         message = message.replace("\n", os.linesep)
-        framelogin.FrameLogin(Toplevel(), self)
-        confirm = messagebox.askyesno("Vraiment ?",
+        waiting_window.wait_window(framelogin.FrameLogin(Toplevel(), self))
+        try:
+            confirm = messagebox.askyesno("Vraiment ?",
                                       message="Envoyer le message avec le compte " + self.shinobiAccess.login + " ?")
+        except:
+            confirm = False
         if confirm:
             est_time = len(names_list) * 0.075
             print("Envoi du message. Estimation : " + "{0:.2f}".format(est_time) + " secondes (soit "+ "{0:.2f}".format(est_time / 60)+" minutes).")
@@ -73,6 +76,9 @@ class Controller:
     # Login
     def connect(self, login, password):
         return self.shinobiAccess.connect(login, password)
+
+    def deconnect(self):
+        self.shinobiAccess.deconnect()
 
 
 # -----------------------------------------

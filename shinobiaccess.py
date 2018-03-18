@@ -33,6 +33,10 @@ class ShinobiAccess:
             self.login = login
         return connected
 
+    def deconnect(self):
+        self.session.get('http://www.shinobi.fr/index.php?page=deconnexion')
+        self.login = None
+
     # PMer
     def send_message(self, receiver, title, message_content):
         """Needs connection"""
