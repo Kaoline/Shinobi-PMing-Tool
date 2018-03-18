@@ -67,6 +67,9 @@ class Controller:
             time2 = time.time()
             print("Temps d'envoi : " + "{0:.2f}".format(time2 - time1) + "s soit " + "{0:.2f}".format((time2 - time1) / 60) + "min")
             print("Finished at " + time.strftime("%H:%M:%S"))
+            return True
+        else:
+            return False
 
     # Deleting PMs
     def delete_pms(self, login, password, nbToDelete):

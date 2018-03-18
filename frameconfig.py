@@ -88,9 +88,12 @@ class FrameConfigMessage(Frame):
             message = self.message_text.get(1.0, END).rstrip("\n")
 
             receivers = names_list.split("\n")
-            self.controller.send_pm(receivers, title, message)
+            success = self.controller.send_pm(receivers, title, message, self)
             self.send_state.set("")
-            messagebox.showinfo("Fini !", "Message envoyé aux " + str(len(receivers)) + " shinobis.")
+            if success:
+                messagebox.showinfo("Fini !", "Message envoyé aux " + str(len(receivers)) + " shinobis.")
+            else:
+                messagebox.showinfo("Erreur", "Le message n'a pas été envoyé. Est-ce normal ?")
 
         self.send_state.set(constants.waiting_message)
         self.after(10, callback)
