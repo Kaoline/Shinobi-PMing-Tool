@@ -55,6 +55,7 @@ class ShinobiAccess:
         except Exception as error:
             print("Problème à l'envoi au destinataire " + receiver + ".\nErreur : " + str(error))
         # print("Finished at " + time.strftime("%H:%M:%S"))
+        print(time.strftime("%H:%M:%S") + " > " + receiver + " ok")
 
     # Ranking search
     def get_shinobis(self, ranking, min_page, max_page, min_lvl, max_lvl, village, min_evo, max_evo, min_points):
