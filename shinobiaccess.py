@@ -86,8 +86,8 @@ class ShinobiAccess:
         page = self.session.get(ranking_link + str(page_number))
         soup = BeautifulSoup(page.text, "html.parser")
         table = soup.find(id="classement_general")
-        try:
-            for tr in table.find_all("tr")[1:]:
+        for tr in table.find_all("tr")[1:]:
+            try:
                 name = tr.find(class_="nom").a.text
                 # team = tr.find(class_="equipe").a.text
                 lvl = int(tr.find(class_="equipe").next_sibling.text)
@@ -98,9 +98,9 @@ class ShinobiAccess:
                 if min_lvl <= lvl <= max_lvl and (village is None or sVillage == village.lower()) and min_evo <= evo <= max_evo and points >= min_points:
                     shinoobs.append(name)
                     # print("Page " + str(page_number) + " ok")
-        except Exception as ec:
-            print(name.encode("UTF-8"))
-            print(ec)
+            except Exception as ec:
+                print(name.encode("UTF-8"))
+                print(ec)
         return shinoobs
 
     # Delete PMs
