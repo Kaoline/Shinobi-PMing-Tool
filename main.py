@@ -16,6 +16,7 @@ import frameopening
 import framelogin
 import framesearching
 import frameconfig
+import frameshop
 import constants
 
 
@@ -75,6 +76,18 @@ class Controller:
     def delete_pms(self, login, password, nbToDelete):
         self.connect(login, password)
         self.shinobiAccess.wipe_pms(nbToDelete)
+
+    # Buy in shop
+    def show_shop(self, waiting_window):
+        waiting_window.wait_window(framelogin.FrameLogin(Toplevel(), self))
+        if self.shinobiAccess.login is None:
+            #TODO
+            print("Pas connecté")
+        elif not self.shinobiAccess.is_in_shop():
+            #TODO
+            print("Mauvais endroit")
+        else:
+            frameshop.FrameShop(Toplevel(), controller)
 
     # Login
     def connect(self, login, password):

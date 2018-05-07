@@ -24,3 +24,7 @@ class FrameOpening(Frame):
         if Config.has_pm_access():
             pm_button = Button(main_frame, text="Envoyer un MP", command=self.controller.show_pmer)
             pm_button.grid(row=1, column=0, padx=20, pady=20)
+
+# TODO mettre un truc plus sérieux
+        shop_button = Button(main_frame, text="Acheter de la drogue", command=lambda: self.controller.show_shop(self))
+        shop_button.grid(row=2, column=0, padx=20, pady=20)

@@ -121,3 +121,10 @@ class ShinobiAccess:
         for tr in table.find_all("tr")[1:nbToDelete+1]:
             suppr = tr.find_all(class_="icon")[1].a["href"]
             self.session.get("http://www.shinobi.fr/" + suppr)
+
+    # Shop
+    def is_in_shop(self):
+        page = self.session.get("http://www.shinobi.fr/index.php?page=moteur_boutique&categorie=normaux")
+        soup = BeautifulSoup(page.text, "html.parser")
+        state = soup.find(id="etatmsg").text
+        return not ("Vous n'êtes pas au bon endroit pour effectuer cette action." in state or "Vous n'êtes pas aux Commerces !" in state)
