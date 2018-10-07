@@ -102,7 +102,7 @@ class FrameSearching(Frame):
         level_frame = Frame(options_sub_frame, padx=margin, pady=margin, highlightbackground=border_color, highlightthickness=border_width)
         level_frame.pack(padx=padding, pady=padding, fill=X)
 
-        Label(level_frame, text="Niveau ").pack(side=LEFT)
+        Label(level_frame, text="Niveaux (inclus)").pack(side=LEFT)
 
         self.start_level_entry = Entry(level_frame, width=5)
         self.start_level_entry.pack(side=LEFT)
