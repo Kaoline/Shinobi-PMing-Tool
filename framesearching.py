@@ -148,7 +148,7 @@ class FrameSearching(Frame):
         score_frame = Frame(options_sub_frame, padx=margin, pady=margin, highlightbackground=border_color, highlightthickness=border_width)
         score_frame.pack(padx=padding, pady=padding, fill=X)
 
-        Label(score_frame, text="Points minimum : ").pack(side=LEFT)
+        Label(score_frame, text="Points totaux minimum : ").pack(side=LEFT)
 
         self.start_score_entry = Entry(score_frame, width=7)
         self.start_score_entry.pack(side=LEFT)
@@ -158,7 +158,7 @@ class FrameSearching(Frame):
         evo_frame = Frame(options_sub_frame, padx=margin, pady=margin, highlightbackground=border_color, highlightthickness=border_width)
         evo_frame.pack(padx=padding, pady=padding, fill=X)
 
-        Label(evo_frame, text="Evo de ").pack(side=LEFT)
+        Label(evo_frame, text="Evo du jour de ").pack(side=LEFT)
 
         self.start_evo_entry = Entry(evo_frame, width=7)
         self.start_evo_entry.pack(side=LEFT)
