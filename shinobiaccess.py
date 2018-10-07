@@ -58,7 +58,7 @@ class ShinobiAccess:
         print(time.strftime("%H:%M:%S") + " > " + receiver + " ok")
 
     # Ranking search
-    def get_shinobis(self, ranking, min_page, max_page, min_lvl, max_lvl, village, min_evo, max_evo, min_points):
+    def get_shinobis(self, ranking, min_page, max_page, min_lvl, max_lvl, village, classe, min_evo, max_evo, min_points):
         print("Starting at " + time.strftime("%H:%M:%S"))
         link = "http://www.shinobi.fr/index.php?page=classement&type=classement_joueurs"
         if ranking == "weekly":
@@ -69,7 +69,7 @@ class ShinobiAccess:
 
         time1 = time.time()
         partial_search = partial(self.search_ranking_page, ranking_link=link, min_lvl=min_lvl, max_lvl=max_lvl,
-                                 village=village, min_evo=min_evo, max_evo=max_evo, min_points=min_points)
+                                 village=village, classe=classe, min_evo=min_evo, max_evo=max_evo, min_points=min_points)
         pool = ThreadPool()
         shinoobs = pool.map(partial_search, range(min_page, max_page + 1))
         pool.close()
@@ -81,7 +81,7 @@ class ShinobiAccess:
 
         return shinoobs
 
-    def search_ranking_page(self, page_number, ranking_link, min_lvl, max_lvl, village, min_evo, max_evo, min_points):
+    def search_ranking_page(self, page_number, ranking_link, min_lvl, max_lvl, village, classe, min_evo, max_evo, min_points):
         shinoobs = []
         page = self.session.get(ranking_link + str(page_number))
         soup = BeautifulSoup(page.text, "html.parser")
@@ -91,14 +91,15 @@ class ShinobiAccess:
                 name = tr.find(class_="nom").a.text
                 # team = tr.find(class_="equipe").a.text
                 lvl = int(tr.find(class_="equipe").next_sibling.text)
-                # clazz = tr.find(class_="village").previous_sibling.img["alt"]
+                clazz_img = tr.find(class_="village").previous_sibling.img
+                clazz = None if clazz_img is None else clazz_img["alt"]
                 sVillage = tr.find(class_="village").a.span.text
                 evo = int(tr.find(class_="evolution").text[1:].replace(",", ""))
                 points = float(tr.find(class_="points").text.replace(",", ""))
-                if min_lvl <= lvl <= max_lvl and (village is None or sVillage == village.lower()) and min_evo <= evo <= max_evo and points >= min_points:
+                if min_lvl <= lvl <= max_lvl and (village is None or sVillage == village.lower()) and (classe is None or clazz == classe) and min_evo <= evo <= max_evo and points >= min_points:
                     shinoobs.append(name)
             except Exception as ec:
-                print("Problem with " + name.encode("UTF-8") + " at page " + str(page_number))
+                # print("Problem at page " + str(page_number))
                 print(ec)
         print("Page " + str(page_number) + " ok")
         return shinoobs
