@@ -143,6 +143,17 @@ class FrameSearching(Frame):
         Radiobutton(class_frame, text="Assassin", variable=self.class_choice, value="Assassin").pack(anchor=W)
         Radiobutton(class_frame, text="Chasseur", variable=self.class_choice, value="Chasseur").pack(anchor=W)
 
+        # Team
+        team_frame = Frame(options_sub_frame, padx=margin, pady=margin, highlightbackground=border_color, highlightthickness=border_width)
+        team_frame.pack(padx=padding, pady=padding, fill=X)
+
+        Label(team_frame, text="Equipe").pack(side="left")
+
+        self.team_choice = StringVar()
+        self.team_choice.set("all")
+        Radiobutton(team_frame, text="Osef", variable=self.team_choice, value="all").pack(anchor=W)
+        Radiobutton(team_frame, text="Avec", variable=self.team_choice, value="yes").pack(anchor=W)
+        Radiobutton(team_frame, text="Sans", variable=self.team_choice, value="no").pack(anchor=W)
 
         # Score
         score_frame = Frame(options_sub_frame, padx=margin, pady=margin, highlightbackground=border_color, highlightthickness=border_width)
@@ -191,6 +202,7 @@ class FrameSearching(Frame):
                 max_lvl=int(self.end_level_entry.get()),
                 village=self.village_choice.get() if self.village_choice.get() != "all" else None,
                 classe=self.class_choice.get() if self.class_choice.get() != "all" else None,
+                team=(True if self.team_choice.get() == "yes" else False) if self.team_choice.get() != "all" else None,
                 min_evo=int(self.start_evo_entry.get()),
                 max_evo=int(self.end_evo_entry.get()),
                 min_points=int(self.start_score_entry.get())
