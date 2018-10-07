@@ -127,6 +127,23 @@ class FrameSearching(Frame):
         Radiobutton(village_frame, text="Mahou", variable=self.village_choice, value="mahou").pack(anchor=W)
         Radiobutton(village_frame, text="Gensou", variable=self.village_choice, value="gensou").pack(anchor=W)
 
+        # Classe
+        class_frame = Frame(options_sub_frame, padx=margin, pady=margin, highlightbackground=border_color, highlightthickness=border_width)
+        class_frame.pack(padx=padding, pady=padding, fill=X)
+
+        Label(class_frame, text="Classe").pack(side="left")
+
+        self.class_choice = StringVar()
+        self.class_choice.set("all")
+        Radiobutton(class_frame, text="Tous", variable=self.class_choice, value="all").pack(anchor=W)
+        Radiobutton(class_frame, text="Combattant", variable=self.class_choice, value="Combattant").pack(anchor=W)
+        Radiobutton(class_frame, text="Eleveur", variable=self.class_choice, value="Eleveur").pack(anchor=W)
+        Radiobutton(class_frame, text="Médecin", variable=self.class_choice, value="Médecin").pack(anchor=W)
+        Radiobutton(class_frame, text="Maître Jutsu", variable=self.class_choice, value="Maître Jutsu").pack(anchor=W)
+        Radiobutton(class_frame, text="Assassin", variable=self.class_choice, value="Assassin").pack(anchor=W)
+        Radiobutton(class_frame, text="Chasseur", variable=self.class_choice, value="Chasseur").pack(anchor=W)
+
+
         # Score
         score_frame = Frame(options_sub_frame, padx=margin, pady=margin, highlightbackground=border_color, highlightthickness=border_width)
         score_frame.pack(padx=padding, pady=padding, fill=X)
@@ -173,6 +190,7 @@ class FrameSearching(Frame):
                 min_lvl=int(self.start_level_entry.get()),
                 max_lvl=int(self.end_level_entry.get()),
                 village=self.village_choice.get() if self.village_choice.get() != "all" else None,
+                classe=self.class_choice.get() if self.class_choice.get() != "all" else None,
                 min_evo=int(self.start_evo_entry.get()),
                 max_evo=int(self.end_evo_entry.get()),
                 min_points=int(self.start_score_entry.get())
