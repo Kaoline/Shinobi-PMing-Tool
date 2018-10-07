@@ -97,10 +97,10 @@ class ShinobiAccess:
                 points = float(tr.find(class_="points").text.replace(",", ""))
                 if min_lvl <= lvl <= max_lvl and (village is None or sVillage == village.lower()) and min_evo <= evo <= max_evo and points >= min_points:
                     shinoobs.append(name)
-                    # print("Page " + str(page_number) + " ok")
             except Exception as ec:
-                print(name.encode("UTF-8"))
+                print("Problem with " + name.encode("UTF-8") + " at page " + str(page_number))
                 print(ec)
+        print("Page " + str(page_number) + " ok")
         return shinoobs
 
     # Delete PMs
@@ -118,8 +118,9 @@ class ShinobiAccess:
         page = self.session.get("http://www.shinobi.fr/index.php?page=menu-messagerie")
         soup = BeautifulSoup(page.text, "html.parser")
         table = soup.find(id="messagerie")
-        for tr in table.find_all("tr")[1:nbToDelete+1]:
+        for tr in table.find_all("tr")[1:nb_to_delete + 1]:
             suppr = tr.find_all(class_="icon")[1].a["href"]
+            # print(suppr)
             self.session.get("http://www.shinobi.fr/" + suppr)
 
     # Shop
