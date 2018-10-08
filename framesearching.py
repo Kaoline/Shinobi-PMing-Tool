@@ -133,15 +133,20 @@ class FrameSearching(Frame):
 
         Label(class_frame, text="Classe").pack(side="left")
 
-        self.class_choice = StringVar()
-        self.class_choice.set("all")
-        Radiobutton(class_frame, text="Tous", variable=self.class_choice, value="all").pack(anchor=W)
-        Radiobutton(class_frame, text="Combattant", variable=self.class_choice, value="Combattant").pack(anchor=W)
-        Radiobutton(class_frame, text="Eleveur", variable=self.class_choice, value="Eleveur").pack(anchor=W)
-        Radiobutton(class_frame, text="Médecin", variable=self.class_choice, value="Médecin").pack(anchor=W)
-        Radiobutton(class_frame, text="Maître Jutsu", variable=self.class_choice, value="Maître Jutsu").pack(anchor=W)
-        Radiobutton(class_frame, text="Assassin", variable=self.class_choice, value="Assassin").pack(anchor=W)
-        Radiobutton(class_frame, text="Chasseur", variable=self.class_choice, value="Chasseur").pack(anchor=W)
+        self.class_none = BooleanVar(value=True)
+        Checkbutton(class_frame, text="Aucune", variable=self.class_none).pack(anchor=W)
+        self.class_combattant = BooleanVar(value=True)
+        Checkbutton(class_frame, text="Combattant", variable=self.class_combattant).pack(anchor=W)
+        self.class_eleveur = BooleanVar(value=True)
+        Checkbutton(class_frame, text="Eleveur", variable=self.class_eleveur).pack(anchor=W)
+        self.class_medecin = BooleanVar(value=True)
+        Checkbutton(class_frame, text="Médecin", variable=self.class_medecin).pack(anchor=W)
+        self.class_maitre_jutsu = BooleanVar(value=True)
+        Checkbutton(class_frame, text="Maître Jutsu", variable=self.class_maitre_jutsu).pack(anchor=W)
+        self.class_assassin = BooleanVar(value=True)
+        Checkbutton(class_frame, text="Assassin", variable=self.class_assassin).pack(anchor=W)
+        self.class_chasseur = BooleanVar(value=True)
+        Checkbutton(class_frame, text="Chasseur", variable=self.class_chasseur).pack(anchor=W)
 
         # Team
         team_frame = Frame(options_sub_frame, padx=margin, pady=margin, highlightbackground=border_color, highlightthickness=border_width)
@@ -201,7 +206,7 @@ class FrameSearching(Frame):
                 min_lvl=int(self.start_level_entry.get()),
                 max_lvl=int(self.end_level_entry.get()),
                 village=self.village_choice.get() if self.village_choice.get() != "all" else None,
-                classe=self.class_choice.get() if self.class_choice.get() != "all" else None,
+                classe=self.get_selected_classes(),
                 team=(True if self.team_choice.get() == "yes" else False) if self.team_choice.get() != "all" else None,
                 min_evo=int(self.start_evo_entry.get()),
                 max_evo=int(self.end_evo_entry.get()),
@@ -214,3 +219,21 @@ class FrameSearching(Frame):
 
         self.search_state.set(constants.waiting_message)
         self.after(10, callback)
+
+    def get_selected_classes(self):
+        list = []
+        if self.class_none.get():
+            list.append(None)
+        if self.class_combattant.get():
+            list.append("Combattant")
+        if self.class_eleveur.get():
+            list.append("Eleveur")
+        if self.class_medecin.get():
+            list.append("Médecin")
+        if self.class_maitre_jutsu.get():
+            list.append("Maître Jutsu")
+        if self.class_assassin.get():
+            list.append("Assassin")
+        if self.class_chasseur.get():
+            list.append("Chasseur")
+        return list
