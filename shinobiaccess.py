@@ -96,7 +96,7 @@ class ShinobiAccess:
                 sVillage = tr.find(class_="village").a.span.text
                 evo = int(tr.find(class_="evolution").text[1:].replace(",", ""))
                 points = float(tr.find(class_="points").text.replace(",", ""))
-                if min_lvl <= lvl <= max_lvl and (village is None or sVillage == village.lower()) and (classe is None or clazz == classe) and (team is None or (team == has_team)) and min_evo <= evo <= max_evo and points >= min_points:
+                if min_lvl <= lvl <= max_lvl and (village is None or sVillage == village.lower()) and (clazz in classe) and (team is None or (team == has_team)) and min_evo <= evo <= max_evo and points >= min_points:
                     shinoobs.append(name)
             except Exception as ec:
                 # print("Problem at page " + str(page_number))
