@@ -88,6 +88,8 @@ class FrameConfigMessage(Frame):
             message = self.message_text.get(1.0, END).rstrip("\n")
 
             receivers = names_list.split("\n")
+            moles = fs.load_moles().split("\n")
+            receivers = [x for x in receivers if x not in moles]
             success = self.controller.send_pm(receivers, title, message, self)
             self.send_state.set("")
             if success:

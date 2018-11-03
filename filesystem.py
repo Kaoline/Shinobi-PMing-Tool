@@ -6,9 +6,15 @@ import constants
 
 
 def load_receivers():
-    if not os.path.isfile("Destinataires.txt"):
+    if not os.path.isfile(constants.default_receivers_file):
         open(constants.default_receivers_file, "x", encoding="utf-8").close()
     return open(constants.default_receivers_file, "r", encoding="utf-8").read()
+
+
+def load_moles():
+    if not os.path.isfile(constants.default_moles_file):
+        open(constants.default_moles_file, "x", encoding="utf-8").close()
+    return open(constants.default_moles_file, "r", encoding="utf-8").read()
 
 
 def load_message():
